@@ -28,14 +28,19 @@ let arrayBoton =[]
 let botonTierra = document.getElementById('boton-tierra')
 let botonFuego = document.getElementById('boton-fuego')
 let botonAgua = document.getElementById('boton-agua')
+//ataques del jugador y enemigo
 let ataqueJugador
 let ataqueEnemigo
+//mascota seleccionada por el jugardor
 let mascotaJugador
+//mascota aleatoria del enemigo
 let mascotaAleatoria
-let opcionDeMokepones
+//inputs de las pets
+let arrayPet=[]
+//botones de cada 
 let inputHipodoge
 let inputCapipepo
-let inputRatigueya
+let inputRatigueya 
 let vidasJugador 
 let vidasEnemigo 
 
@@ -86,49 +91,44 @@ function iniciarJuego() {
     sectionSeleccionarAtaque.style.display = 'none'
 
     mokepones.forEach((mokepon) => {
-        opcionDeMokepones = `
-        <input type="radio" name="mascota" id=${mokepon.nombre} />
+       let opcionDeMokepones = `
+        <input type="radio" name="mascota" class="pet-input" id=${mokepon.nombre} />
         <label class="tarjeta-de-mokepon" for=${mokepon.nombre}>
             <p>${mokepon.nombre}</p>
             <img src=${mokepon.foto} alt=${mokepon.nombre}>
         </label>
         `
     contenedorTarjetas.innerHTML += opcionDeMokepones
-
+    })
+      arrayPet= document.querySelectorAll('.pet-input')
+      dynamicPet()
      inputHipodoge = document.getElementById('Hipodoge')
      inputCapipepo = document.getElementById('Capipepo')
-     inputRatigueya = document.getElementById('Ratigueya')
-
-    })
-    
+     inputRatigueya = document.getElementById('Ratigueya')  
+     
     botonMascotaJugador.addEventListener('click', seleccionarMascotaJugador)
-
-    
-    botonFuego.addEventListener('click', ataqueFuego)
-    
-    botonAgua.addEventListener('click', ataqueAgua)
-    
-    botonTierra.addEventListener('click', ataqueTierra)
-
-    
     botonReiniciar.addEventListener('click', reiniciarJuego)
+}
+//adds eventListener for all pets available
+function dynamicPet (){
+    arrayPet.forEach()
 }
 
 function seleccionarMascotaJugador() {
-    
+    //hides this section's display
     sectionSeleccionarMascota.style.display = 'none'
-    
-    
+    //activates this section's display
     sectionSeleccionarAtaque.style.display = 'flex'
     
     if (inputHipodoge.checked) {
         spanMascotaJugador.innerHTML = `${inputHipodoge.id}`;
-        mascotaJugador = mokepones.find(element => mokepones.indexOf(element.id == inputHipodoge.id))
-        console.log(mascotaJugador);
+        mascotaJugador = mokepones.find((moke) => moke.nombre == inputHipodoge.id)
     } else if (inputCapipepo.checked) {
         spanMascotaJugador.innerHTML = `${inputCapipepo.id}`
+        mascotaJugador = mokepones.find((moke) => moke.nombre == inputCapipepo.id)
     } else if (inputRatigueya.checked) {
         spanMascotaJugador.innerHTML = `${inputRatigueya.id}`
+        mascotaJugador = mokepones.find((moke) => moke.nombre == inputRatigueya.id)
     } else {
         alert('Selecciona una mascota')
     }
@@ -144,7 +144,6 @@ function seleccionarMascotaEnemigo() {
 }
 //ataques dinamicos
 function ataques(){
-   
     mascotaJugador.ataques.forEach((at)=>{
         let varAtaque=  `<button id="${at.id}" class="boton-de-ataque b-ataque">${at.nombre}</button>` ;
         botonesAtaques.innerHTML +=  varAtaque;
@@ -155,29 +154,13 @@ function ataques(){
 }
 //agregamos los escucha de eventos a los botones
 function eventoDinamico(){
-    arrayBoton.forEach((element)=>{
-        element.addEventListener('click',)
+    arrayBoton.forEach((button)=>{
+        button.addEventListener('click',(e)=> {ataqueAleatorioEnemigo(e.target.textContent)})
     })
 }
 
-//funiones de ataques, donde cada una obtiene el ataque del mokepon correspondiente
-function ataqueFuego() {
-    let ataques=mascotaJugador.ataques
-    ataqueJugador = ataques.find(element => element.id==botonFuego.id).nombre
-    ataqueAleatorioEnemigo()
-}
-function ataqueAgua() {
-    let ataques=mascotaJugador.ataques
-    ataqueJugador = ataques.find(element => element.id==botonAgua.id).nombre   
-     ataqueAleatorioEnemigo();
-}
-function ataqueTierra() {
-    let ataques=mascotaJugador.ataques
-    ataqueJugador = ataques.find(element => element.id==botonTierra.id).nombre    
-    ataqueAleatorioEnemigo(); 
-}
-
-function ataqueAleatorioEnemigo() {
+function ataqueAleatorioEnemigo(atjuga) {
+    ataqueJugador=atjuga
     let ataques = mokepones[mascotaAleatoria].ataques
     let ataqueAleatorio = aleatorio(0,ataques.length-1)
     ataqueEnemigo = ataques[ataqueAleatorio].nombre;
